@@ -4,11 +4,12 @@ import { exportCSV } from '../lib/exportCSV';
 import { parseFixMessage } from '../parser/fixParser';
 
 function App() {
-  const [rawMessage, setRawMessage] = useState('');
+  const [rawMessage, setRawMessage] = useState("");
   const [parsedData, setParsedData] = useState([]);
+  const [delimiter, setDelimiter] = useState('\u0001'); // Default delimiter is SOH
 
   const handleParse = () => {
-    const parsed = parseFixMessage(rawMessage);
+    const parsed = parseFixMessage(rawMessage, delimiter);
     setParsedData(parsed);
   };
 
@@ -21,6 +22,16 @@ function App() {
         onChange={(e) => setRawMessage(e.target.value)}
         placeholder="Please paste your FIX message here."
       />
+      <span className="text-indigo-900 font-bold">Delimiter: </span>
+      <select 
+        className="mt-1 border p-1"
+        value={delimiter}
+        onChange={(e) => setDelimiter(e.target.value)}
+      >
+        <option value="\u0001">SOH ( \x01 )</option>
+        <option value=";">; ( semicolon )</option>
+        <option value="^">^ ( hat )</option>
+      </select>
       <div className="mt-2 flex gap-2">
         <button
           onClick={handleParse}

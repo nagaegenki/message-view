@@ -1,19 +1,17 @@
 import tagDefs from './tagDefs.json';
 import groupTagDefs from './groupTagDefs.json';
 
-const SOH = '\u0001';
-
-export function parseFixMessage(message) {
-  const fields = message.split(SOH).filter(Boolean);
+export function parseFixMessage(message, delimiter) {
+  const fields = message.split(delimiter).filter(Boolean);
   const result = [];
 
   let i = 0;
 
   while (i < fields.length) {
-    const [rawTag, ...rawValueParts] = fields[i].split('=');
+    const [rawTag, ...rawValueParts] = fields[i].split("=");
     const tag = rawTag;
-    const value = rawValueParts.join('=');
-    const def = tagDefs[tag] || { name: `Unknown`, description: 'No description' };
+    const value = rawValueParts.join("=");
+    const def = tagDefs[tag] || { name: "Unknown", description: "No description" };
     const isGroup = def.group || false;
 
     if (isGroup) {
@@ -29,18 +27,18 @@ export function parseFixMessage(message) {
         while (j < groupFields.length) {
           i++;
 
-          const [nextTagRaw, ...nextValueParts] = fields[i].split('=');
+          const [nextTagRaw, ...nextValueParts] = fields[i].split("=");
           const nextTag = nextTagRaw;
-          const nextValue = nextValueParts.join('=');
+          const nextValue = nextValueParts.join("=");
           
           const childDef = tagDefs[nextTag] || {};
           groupItem.push({
             tag: nextTag,
-            name: childDef.name || 'Unknown',
-            description: childDef.description || 'No description',
-            type: childDef.type || '',
+            name: childDef.name || "Unknown",
+            description: childDef.description || "No description",
+            type: childDef.type || "",
             value: nextValue,
-            enumLabel: childDef.enum?.[nextValue] || '',
+            enumLabel: childDef.enum?.[nextValue] || "",
             repeating: true
           });
 
@@ -53,10 +51,10 @@ export function parseFixMessage(message) {
 
       result.push({
         tag,
-        name: def.name || '',
-        description: def.description || '',
+        name: def.name || "",
+        description: def.description || "",
         value,
-        type: def.type || '',
+        type: def.type || "",
         children,
         group: true
       });
@@ -64,11 +62,11 @@ export function parseFixMessage(message) {
       // Process normal tag
       result.push({
         tag,
-        name: def.name || '',
-        description: def.description || '',
+        name: def.name || "",
+        description: def.description || "",
         value,
-        type: def.type || '',
-        enumLabel: def.enum?.[value] || ''
+        type: def.type || "",
+        enumLabel: def.enum?.[value] || ""
       });
     }
 
