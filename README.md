@@ -1,4 +1,4 @@
-# Message Formatter
+# Message View
 
 任意のメッセージを表形式で整形できる Web アプリです。  
 This is a web application that formats any protocol messages in a table format.
