@@ -1,0 +1,60 @@
+import { useState } from 'react';
+import FixTable from '../components/FixTable';
+import { exportCSV } from '../lib/exportCSV';
+import { parseFixMessage } from '../parser/fixParser';
+
+function App() {
+  const [rawMessage, setRawMessage] = useState('');
+  const [parsedData, setParsedData] = useState([]);
+
+  const handleParse = () => {
+    const parsed = parseFixMessage(rawMessage);
+    setParsedData(parsed);
+  };
+
+  return (
+    <div className="p-4 max-w-4xl mx-auto">
+      <h1 className="text-xl text-indigo-900 font-bold mb-4">Visualize FIX Msg</h1>
+      <textarea
+        className="border p-2 w-full h-24"
+        value={rawMessage}
+        onChange={(e) => setRawMessage(e.target.value)}
+        placeholder="Please paste your FIX message here."
+      />
+      <div className="mt-2 flex gap-2">
+        <button
+          onClick={handleParse}
+          className="px-4 py-1 bg-blue-700 text-white rounded hover:bg-blue-900"
+        >
+          Visualize
+        </button>
+        <button
+          onClick={() => window.print()}
+          className="px-4 py-1 bg-green-700 text-white rounded hover:bg-green-900"
+        >
+          PDF
+        </button>
+        <button
+          onClick={() => {
+            const now = new Date();
+            const ymd = now.toISOString().slice(0, 10).replace(/-/g, ''); // YYYYMMDD
+            const hms = now.toTimeString().slice(0, 8).replace(/:/g, ''); // HHMMSS
+            const filename = `fix_data_${ymd}-${hms}.csv`;
+            exportCSV(parsedData, filename);
+          }}
+          className="px-4 py-1 bg-blue-700 text-white rounded hover:bg-blue-900"
+        >
+          CSV
+        </button>
+      </div>
+
+      {parsedData.length > 0 && (
+        <div className="mt-4">
+          <FixTable data={parsedData} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;

@@ -1,0 +1,59 @@
+{
+  "8": {
+    "name": "BeginString",
+    "description": "Identifies beginning of new message",
+    "required": true,
+    "type": "string"
+  },
+  "9": {
+    "name": "BodyLength",
+    "description": "Message Length",
+    "required": true,
+    "type": "integer"
+  },
+  "35": {
+    "name": "MsgType",
+    "description": "Message Type",
+    "required": true,
+    "type": "char",
+    "enum": {
+      "8": "Execution Report",
+      "D": "New Order - Single"
+    }
+  },
+  "55": {
+    "name": "Symbol",
+    "description": "Instrument Symbol",
+    "type": "string"
+  },
+  "60": {
+    "name": "TransactTime",
+    "description": "Timestamp when the business transaction represented by the message occurred.",
+    "type": "timestamp"
+  },
+  "555": {
+    "name": "NoLegs",
+    "description": "Number of Legs",
+    "type": "int",
+    "group": true
+  },
+  "600": {
+    "name": "LegSymbol",
+    "description": "Leg instrument symbol",
+    "type": "string"
+  },
+  "624": {
+    "name": "LegSide",
+    "description": "Side of the leg",
+    "type": "char",
+    "enum": {
+      "1": "Buy",
+      "2": "Sell"
+    }
+  },
+  "1003": {
+    "name": "TradeID",
+    "description": "The unique ID assigned to the trade entity.",
+    "type": "string"
+  }
+}
