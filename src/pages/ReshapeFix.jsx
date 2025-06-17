@@ -30,6 +30,7 @@ function App() {
       >
         <option value="\u0001">SOH ( \x01 )</option>
         <option value=";">; ( semicolon )</option>
+        <option value="|">| ( pipe )</option>
         <option value="^">^ ( hat )</option>
       </select>
       <div className="mt-2 flex gap-2">
