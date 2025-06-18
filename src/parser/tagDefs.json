@@ -3,27 +3,123 @@
     "name": "BeginString",
     "description": "Identifies beginning of new message",
     "required": true,
-    "type": "string"
+    "type": "string",
+    "enum": {
+      "FIX4.2": "Session profile FIX4.2",
+      "FIX4.4": "Session profile FIX4.4"
+    }
   },
   "9": {
     "name": "BodyLength",
-    "description": "Message Length",
+    "description": "Message length, in bytes, forward to the CheckSum field.",
     "required": true,
-    "type": "integer"
+    "type": "int"
   },
   "35": {
     "name": "MsgType",
-    "description": "Message Type",
+    "description": "Defines message type",
     "required": true,
     "type": "char",
     "enum": {
-      "8": "Execution Report",
-      "D": "New Order - Single"
+      "0": "Heartbeat",
+      "5": "Logout",
+      "8": "ExecutionReport",
+      "A": "Logon",
+      "D": "NewOrderSingle"
+    }
+  },
+  "34": {
+    "name": "MsgSeqNum",
+    "description": "Message sequence number.",
+    "required": true,
+    "type": "int"
+  },
+  "49": {
+    "name": "SenderCompID",
+    "description": "Used to identify firm sending message.",
+    "required": true,
+    "type": "string"
+  },
+  "52": {
+    "name": "SendingTime",
+    "description": "Time of message transmission (always expressed in UTC)",
+    "required": true,
+    "type": "timestamp"
+  },
+  "56": {
+    "name": "TargetCompID",
+    "description": "Used to identify receiving firm.",
+    "required": true,
+    "type": "string"
+  },
+  "1": {
+    "name": "Account",
+    "description": "Account mnemonic as agreed between buy and sell sides.",
+    "type": "string"
+  },
+  "6": {
+    "name": "AvgPx",
+    "description": "Calculated average price of all fills on this order.",
+    "type": "float"
+  },
+  "11": {
+    "name": "ClOrdID",
+    "description": "Client order ID, unique identifier for Order as assigned by the buy-side.",
+    "type": "string"
+  },
+  "17": {
+    "name": "ExecID",
+    "description": "Execution ID, unique identifier of execution message as assigned by sell-side.",
+    "type": "string"
+  },
+  "20": {
+    "name": "ExecTransType",
+    "description": "Indicates the type of execution transaction.",
+    "type": "char",
+    "enum": {
+      "0": "New",
+      "1": "Cancel",
+      "2": "Correct"
+    }
+  },
+  "29": {
+    "name": "LastCpacity",
+    "description": "Broker capacity in order execution.",
+    "type": "char",
+    "enum": {
+      "1": "Agent",
+      "2": "Cross as Agent",
+      "3": "Cross as Principal",
+      "4": "Principal"
+    }
+  },
+  "31": {
+    "name": "LastPx",
+    "description": "Price of this (last) fill.",
+    "type": "float"
+  },
+  "32": {
+    "name": "LastQty",
+    "description": "Quantity bought/sold on this (last) fill.",
+    "type": "int"
+  },
+  "37": {
+    "name": "OrderID",
+    "description": "Unique identifier for Order as assigned by sell-side.",
+    "type": "string"
+  },
+  "54": {
+    "name": "Side",
+    "description": "Side of order.",
+    "type": "char",
+    "enum": {
+      "1": "Buy",
+      "2": "Sell"
     }
   },
   "55": {
     "name": "Symbol",
-    "description": "Instrument Symbol",
+    "description": "Ticker symbol.",
     "type": "string"
   },
   "60": {
@@ -31,29 +127,70 @@
     "description": "Timestamp when the business transaction represented by the message occurred.",
     "type": "timestamp"
   },
+  "75": {
+    "name": "TradeDate",
+    "description": "Indicates date of trading day.",
+    "type": "date"
+  },
+  "131": {
+    "name": "QuoteReqID",
+    "description": "Unique identifier for a QuoteRequest.",
+    "type": "string"
+  },
+  "150": {
+    "name": "ExecType",
+    "description": "Describes the specific ExecutionRpt while OrdStatus(39) will always identify the current order status.",
+    "type": "char",
+    "enum": {
+      "0": "New",
+      "4": "Canceled",
+      "8": "Rejected"
+    }
+  },
+  "453": {
+    "name": "NoPartyIDs",
+    "description": "Number of PartyID (448), PartyIDSource (447), and PartyRole (452) entries",
+    "type": "int",
+    "group": true
+  },
+  "448": {
+    "name": "PartyID",
+    "description": "Party identifier/code.",
+    "type": "string"
+  },
+  "452": {
+    "name": "PartyRole",
+    "description": "Identifies the type or role of the PartyID (448) specified.",
+    "type": "int",
+    "enum": {
+      "1": "Executing Firm",
+      "3": "Client ID",
+      "9": "Fund Manager Client ID"
+    }
+  },
   "555": {
     "name": "NoLegs",
-    "description": "Number of Legs",
+    "description": "Number of InstrumentLeg repeating group instances.",
     "type": "int",
     "group": true
   },
   "600": {
     "name": "LegSymbol",
-    "description": "Leg instrument symbol",
+    "description": "Multileg instrument's individual security's Symbol.",
     "type": "string"
   },
   "624": {
     "name": "LegSide",
-    "description": "Side of the leg",
+    "description": "The side of this individual leg (multileg security).",
     "type": "char",
     "enum": {
       "1": "Buy",
       "2": "Sell"
     }
   },
-  "1003": {
-    "name": "TradeID",
-    "description": "The unique ID assigned to the trade entity.",
+  "10": {
+    "name": "CheckSum",
+    "description": "Three byte, simple checksum.",
     "type": "string"
   }
 }

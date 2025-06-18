@@ -9,7 +9,7 @@ const FixTable = ({ data = [] }) => {
 
     const repeatBgClass = 
       groupIndex !== null && groupIndex % 2 === 0
-      ? "bg-indigo-50"
+      ? "bg-indigo-100"
       : "bg-white";
 
     
