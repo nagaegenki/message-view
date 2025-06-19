@@ -10,8 +10,6 @@ function App() {
   const [selectedDefs, setselectedDefs] = useState("");    // Placeholder for tag definitions
 
   const handleParse = () => {
-    console.log("Delimiter:", delimiter);
-    console.log("Selected Definitions:", selectedDefs);
     const parsed = parseFixMessage(rawMessage, delimiter, selectedDefs);
     setParsedData(parsed);
   };
