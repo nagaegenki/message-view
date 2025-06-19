@@ -2,5 +2,9 @@
   "555": {
     "name": "NoLegs",
     "fields": ["600", "624"]
+  },
+  "453": {
+    "name": "NoPartyIDs",
+    "fields": ["448", "452"]
   }
 }
