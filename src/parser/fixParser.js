@@ -1,8 +1,22 @@
-import tagDefs from './tagDefs.json';
+import defaultDef from './tagDefaultDefs.json';
+import customDef from './tagCustomDefs.json';
 import groupTagDefs from './groupTagDefs.json';
 
-export function parseFixMessage(message, delimiter) {
+export function parseFixMessage(message, delimiter, selectedDefs) {
   const fields = message.split(delimiter).filter(Boolean);
+
+  // To switch between different tag definitions based on user selection
+  const switchTagDefs = () => {
+    switch (selectedDefs) {
+      case "defaultDef":
+        return defaultDef;
+      case "customDef":
+        return customDef;
+      default:
+        return defaultDef;  // Fallback to default if no valid option is selected
+    }
+  }
+  const tagDefs = switchTagDefs();
   const result = [];
 
   let i = 0;
