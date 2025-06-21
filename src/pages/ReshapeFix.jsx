@@ -7,7 +7,7 @@ function App() {
   const [rawMessage, setRawMessage] = useState("");
   const [parsedData, setParsedData] = useState([]);
   const [delimiter, setDelimiter] = useState('\u0001'); // Default delimiter is SOH
-  const [selectedDefs, setselectedDefs] = useState("");    // Placeholder for tag definitions
+  const [selectedDefs, setselectedDefs] = useState("defaultDef");    // Placeholder for tag definitions
 
   const handleParse = () => {
     const parsed = parseFixMessage(rawMessage, delimiter, selectedDefs);
