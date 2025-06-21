@@ -5,67 +5,88 @@ import groupTagDefs from './groupTagDefs.json';
 export function parseFixMessage(message, delimiter, selectedDefs) {
   const fields = message.split(delimiter).filter(Boolean);
 
-  // To switch between different tag definitions based on user selection
+  // To switch different tag definitions based on user selection
   const switchTagDefs = () => {
     switch (selectedDefs) {
-      case "defaultDef":
-        return defaultDef;
       case "customDef":
         return customDef;
+      case "defaultDef":
       default:
-        return defaultDef;  // Fallback to default if no valid option is selected
+        return defaultDef;
     }
   }
   const tagDefs = switchTagDefs();
-  const result = [];
 
   let i = 0;
+  const result = [];
+
+  const parseGroupChildren = (expectedFields, groupCount) => {
+    const children = [];
+
+    for (let g = 0; g < groupCount; g++) {
+      const groupItem = [];
+      const tmpFields = [...expectedFields];
+
+      while (i + 1 < fields.length) {
+        i++;
+        const [rawTag, ...valueParts] = fields[i].split("=");
+        const tag = rawTag;
+        const value = valueParts.join("=");
+        const def = tagDefs[tag] || { name: "Unknown", description: "No description" };
+
+        if (!tmpFields.includes(tag)) {
+          i--;  // If the tag is not part of the group, we stop processing this group
+          break;
+        }
+
+        tmpFields.splice(tmpFields.indexOf(tag), 1); // Remove tag from the list
+
+        if (def.group && groupTagDefs[tag]) {
+          const nestedGroupCount = parseInt(value, 10);
+          const nestedFields = groupTagDefs[tag].fields || [];
+          const nestedChildren = parseGroupChildren(nestedFields, nestedGroupCount);
+
+          groupItem.push({
+            tag,
+            name: def.name || "",
+            description: def.description || "",
+            value,
+            type: def.type || "",
+            children: nestedChildren,
+            group: true,
+            repeating: true
+          });
+        } else {
+          groupItem.push({
+            tag,
+            name: def.name || "",
+            description: def.description || "",
+            value,
+            type: def.type || "",
+            enumLabel: def.enum?.[value] || "",
+            repeating: true
+          });
+        }
+      }
+      children.push(groupItem);
+    }
+
+    return children;
+  };
 
   while (i < fields.length) {
     const [rawTag, ...rawValueParts] = fields[i].split("=");
     const tag = rawTag;
     const value = rawValueParts.join("=");
     const def = tagDefs[tag] || { name: "Unknown", description: "No description" };
-    const isGroup = def.group || false;
 
-    if (isGroup) {
+    if (def.group && groupTagDefs[tag]) {
       // Process repeating group
       const groupCount = parseInt(value, 10);
       const groupFields = groupTagDefs[tag]?.fields || [];
-      const children = [];
+      const children = parseGroupChildren(groupFields, groupCount);
 
-      for (let g = 0; g < groupCount; g++) {
-        const groupItem = [];
-        const tmpGroupFields = [...groupFields];
-
-        while (i + 1 < fields.length) {
-          i++;
-          const [nextTagRaw, ...nextValueParts] = fields[i].split("=");
-          const nextTag = nextTagRaw;
-          const nextValue = nextValueParts.join("=");
-
-          // Check if the next tag is part of the group
-          if (tmpGroupFields.includes(nextTag)) {
-            tmpGroupFields.splice(tmpGroupFields.indexOf(nextTag), 1); // Remove tag from the list
-            const childDef = tagDefs[nextTag] || {};
-            groupItem.push({
-              tag: nextTag,
-              name: childDef.name || "Unknown",
-              description: childDef.description || "No description",
-              type: childDef.type || "",
-              value: nextValue,
-              enumLabel: childDef.enum?.[nextValue] || "",
-              repeating: true
-            });
-          } else {
-            i--;  // If the tag is not part of the group, we stop processing this group
-            break;
-          }
-        }
-        children.push(groupItem);
-      }
-      console.log("Group Fields:", children);
-
+      // Add group field to the result
       result.push({
         tag,
         name: def.name || "",

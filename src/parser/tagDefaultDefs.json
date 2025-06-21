@@ -188,6 +188,27 @@
       "2": "Sell"
     }
   },
+  "11450": {
+    "name": "NoTestGroup",
+    "description": "Test Grouping Tag",
+    "type": "int",
+    "group": true
+  },
+  "11451": {
+    "name": "TestTag1",
+    "description": "Test Tag1",
+    "type": "string"
+  },
+  "11452": {
+    "name": "TestTag2",
+    "description": "Test Tag2",
+    "type": "string"
+  },
+  "11900": {
+    "name": "TestTag99",
+    "description": "Test Tag99",
+    "type": "string"
+  },
   "10": {
     "name": "CheckSum",
     "description": "Three byte, simple checksum.",
