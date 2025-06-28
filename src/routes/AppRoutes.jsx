@@ -5,7 +5,7 @@ import {
   Link
 } from 'react-router-dom';
 import Home from '../pages/Home';
-import ReshapeFix from '../pages/ReshapeFix';
+import FixVisualizer from '../pages/FixVisualizer';
 
 const AppRoutes = () => {
   return (
@@ -14,13 +14,13 @@ const AppRoutes = () => {
       <nav className="bg-indigo-900 text-white p-4">
         <ul className="flex space-x-4">
           <li><Link to="/">Home</Link></li>
-          <li><Link to="/reshape">Visualize FIX Msg</Link></li>
+          <li><Link to="/fix">Visualize FIX Msg</Link></li>
         </ul>
       </nav>
       {/* Definition for routing */}
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/reshape" element={<ReshapeFix />} />
+        <Route path="/fix" element={<FixVisualizer />} />
       </Routes>
     </BrowserRouter>
   );

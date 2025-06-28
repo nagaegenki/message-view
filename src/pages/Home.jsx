@@ -14,7 +14,7 @@ const Home = () => {
           <tbody>
             <tr>
               <td>
-                <Link to="/reshape" className="text-lg text-indigo-600 hover:text-indigo-700">Visualize FIX Msg</Link>
+                <Link to="/fix" className="text-lg text-indigo-600 hover:text-indigo-700">Visualize FIX Msg</Link>
               </td>
               <td>You can paste your FIX message in the next page and visualize it.</td>
             </tr>
