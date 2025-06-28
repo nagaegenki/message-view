@@ -41,22 +41,27 @@ yarn install
 
 ### FIX 定義ファイルのカスタマイズ / Customize FIX Definitions
 
-本アプリは、FIX メッセージの構造を理解・整形するために、`src/parser/tagDefs.json` および `groupTagDefs.json` を使用しています。  
+本アプリは、FIX メッセージの構造を理解・整形するために、定義ファイルを使用しています。
+見本として public/configs 配下に定義ファイルを用意しています。
 これらのファイルは FIX バージョンや取り扱うメッセージタイプに応じて **自由に編集・拡張可能** です。
 
-`tagDefs.json` では各タグの型・説明・enum 値などを定義し、  
-`groupTagDefs.json` では繰り返し構造（NoLegs など）を定義します。
+定義ファイルの種類：
+- `tag**Defs.json` では各タグの型・説明・enum 値などを定義
+- `groupTagDefs.json` では繰り返し構造（NoLegs など）を定義
+
+ビルド後は dist/configs フォルダ配下に配置されるためビルド後も編集が可能となっています。
 
 ---
 
-This application uses `src/parser/tagDefs.json` and `groupTagDefs.json`  
-to define the structure and interpretation of FIX messages.
-
+This application uses definition files to understand and format the structure of FIX messages.  
+Definition files are provided under public/configs as a sample.  
 You can freely **customize and extend** these files according to your target FIX version or message types.
 
-- `tagDefs.json` defines tag metadata such as type, label, and enum values.
-- `groupTagDefs.json` defines repeating group structures (e.g., NoLegs, NoOrders).
+Types of definition files:
+- `tag**Defs.json` defines each tag type, description, enum value, etc.
+- `groupTagDefs.json` defines repeatition structure (NoLegs, etc.)
 
+The files are placed under the dist/configs folder after build, so they can be edited even after build.
 
 ### 開発サーバーの起動 / Run the development server
 
@@ -93,6 +98,16 @@ src/
 ├── routes/         # Routing Definition
 ├── styles/         # CSS / Tailwind
 └── main.jsx        # Application Entry Point
+```
+
+ビルド後の dist/ 配下の構成  
+"dist" directory structure after build
+```plaintext
+dist/
+├── assets              # js, css created by build command
+├── configs             # Tag Definition
+├── index.html          # Top Page
+└── message-view.svg    # Image File
 ```
 
 ## ライセンス / License

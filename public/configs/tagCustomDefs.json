@@ -187,11 +187,14 @@
   "624": {
     "name": "LegSide",
     "description": "The side of this individual leg (multileg security).",
-    "type": "char",
     "enum": {
       "1": "Buy",
       "2": "Sell"
     }
+  },
+  "556": {
+    "name": "LegCcy",
+    "description": "Currency of the leg instrument."
   },
   "10": {
     "name": "CheckSum",

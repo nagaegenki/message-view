@@ -1,14 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CsvButton from '../components/CsvButton';
 import FixTable from '../components/FixTable';
 import PdfButton from '../components/PdfButton';
 import { parseFixMessage } from '../parser/fixParser';
 
-function App() {
+function FixVisualizer() {
   const [rawMessage, setRawMessage] = useState("");
   const [parsedData, setParsedData] = useState([]);
   const [delimiter, setDelimiter] = useState('\u0001');           // Default delimiter is SOH
   const [selectedDefs, setselectedDefs] = useState("defaultDef"); // Placeholder for tag definitions
+
+  const [tagDefsAll, setTagDefsAll] = useState({});
+  const [groupTagDefs, setGroupTagDefs] = useState({});
+
+  useEffect(() => {
+    const fetchDefs = async () => {
+      const [defaultRes, customRes, groupRes] = await Promise.all([
+        fetch("/configs/tagDefaultDefs.json"),
+        fetch("/configs/tagCustomDefs.json"),
+        fetch("/configs/groupTagDefs.json"),
+      ]);
+      const [defaultDef, customDef, groupDefs] = await Promise.all([
+        defaultRes.json(),
+        customRes.json(),
+        groupRes.json(),
+      ]);
+      setTagDefsAll({ defaultDef, customDef });
+      setGroupTagDefs(groupDefs);
+    };
+    fetchDefs();
+  }, []);
 
   const handleParse = () => {
     if (!rawMessage.trim()) {
@@ -16,7 +37,12 @@ function App() {
       return;
     }
 
-    const parsed = parseFixMessage(rawMessage, delimiter, selectedDefs);
+    if (!Object.keys(tagDefsAll).length || !Object.keys(groupTagDefs).length) {
+      alert("Tag definitions not loaded yet.");
+      return;
+    }
+
+    const parsed = parseFixMessage(rawMessage, delimiter, selectedDefs, tagDefsAll, groupTagDefs);
     setParsedData(parsed);
   };
 
@@ -73,4 +99,4 @@ function App() {
   );
 }
 
-export default App;
+export default FixVisualizer;

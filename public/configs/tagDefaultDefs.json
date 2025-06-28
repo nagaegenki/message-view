@@ -188,6 +188,10 @@
       "2": "Sell"
     }
   },
+  "556": {
+    "name": "LegCcy",
+    "description": "Currency of the leg instrument."
+  },
   "11450": {
     "name": "NoTestGroup",
     "description": "Test Grouping Tag",
