@@ -9,7 +9,7 @@ import FixVisualizer from '../pages/FixVisualizer';
 
 const AppRoutes = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/message-view/">
       {/* Navigation */}
       <nav className="bg-indigo-900 text-white p-4">
         <ul className="flex space-x-4">
