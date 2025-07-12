@@ -53,7 +53,7 @@ function FixVisualizer() {
         className="border p-2 w-full h-24"
         value={rawMessage}
         onChange={(e) => setRawMessage(e.target.value)}
-        placeholder="Please paste your FIX message here."
+        placeholder="Please put FIX message here."
       />
       {/* Delimiter and Tag Definition Selectors */}
       <div className="mt-2 flex items-center gap-2">
