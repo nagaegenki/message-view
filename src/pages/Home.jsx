@@ -4,7 +4,7 @@ const Home = () => {
   return (
     <div>
       <div className="p-4 flex gap-2 items-center flex-col">
-        <img src="/message-view.svg" alt="message-view icon" height={60} width={60} />
+        <img src="/message-view/message-view.svg" alt="message-view icon" height={60} width={60} />
         <h1 className="text-4xl text-indigo-900 font-bold">Message View</h1>
       </div>
       <div className="p-4 max-w-4xl mx-auto">
