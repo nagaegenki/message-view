@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    tags:
+    branches:
       - main
 
 jobs:
@@ -23,5 +23,5 @@ jobs:
       
       - name: Release
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKNE }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npx semantic-release
