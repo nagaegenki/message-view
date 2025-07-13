@@ -16,9 +16,9 @@ function FixVisualizer() {
   useEffect(() => {
     const fetchDefs = async () => {
       const [defaultRes, customRes, groupRes] = await Promise.all([
-        fetch("/configs/tagDefaultDefs.json"),
-        fetch("/configs/tagCustomDefs.json"),
-        fetch("/configs/groupTagDefs.json"),
+        fetch("/message-view/configs/tagDefaultDefs.json"),
+        fetch("/message-view/configs/tagCustomDefs.json"),
+        fetch("/message-view/configs/groupTagDefs.json"),
       ]);
       const [defaultDef, customDef, groupDefs] = await Promise.all([
         defaultRes.json(),
