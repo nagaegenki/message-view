@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/nagaegenki/message-view/compare/v1.5.2...v1.6.0) (2025-07-13)
+
+
+### Features
+
+* add file upload function ([2436959](https://github.com/nagaegenki/message-view/commit/24369597d67f089a9dc06eb2c9418377ee136b7a))
+
 ## [1.5.2](https://github.com/nagaegenki/message-view/compare/v1.5.1...v1.5.2) (2025-07-13)
 
 
