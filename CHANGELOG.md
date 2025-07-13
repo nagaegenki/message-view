@@ -1,3 +1,10 @@
+## [1.5.2](https://github.com/nagaegenki/message-view/compare/v1.5.1...v1.5.2) (2025-07-13)
+
+
+### Bug Fixes
+
+* bug fix for fetching tag definitions ([67d8c78](https://github.com/nagaegenki/message-view/commit/67d8c780226e170832586e5cb9eeef4a6c5873da))
+
 ## [1.5.1](https://github.com/nagaegenki/message-view/compare/v1.5.0...v1.5.1) (2025-07-12)
 
 
