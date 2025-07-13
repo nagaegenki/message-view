@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
+import CaseSelector from '../components/CaseSelector';
 import CsvButton from '../components/CsvButton';
+import FileUploader from '../components/FileUploader';
 import FixTable from '../components/FixTable';
 import PdfButton from '../components/PdfButton';
 import { parseFixMessage } from '../parser/fixParser';
@@ -9,6 +11,8 @@ function FixVisualizer() {
   const [parsedData, setParsedData] = useState([]);
   const [delimiter, setDelimiter] = useState('\u0001');           // Default delimiter is SOH
   const [selectedDefs, setselectedDefs] = useState("defaultDef"); // Placeholder for tag definitions
+  const [cases, setCases] = useState([]);
+  const [selectedCaseIndex, setSelectedCaseIndex] = useState(null);
 
   const [tagDefsAll, setTagDefsAll] = useState({});
   const [groupTagDefs, setGroupTagDefs] = useState({});
@@ -46,9 +50,32 @@ function FixVisualizer() {
     setParsedData(parsed);
   };
 
+  const handleMessagesParsed = (messages) => {
+    setCases(messages);
+    setSelectedCaseIndex(null); // Reset selected case index
+    setRawMessage("");          // Clear raw message input
+    setParsedData([]);          // Reset parsed data when new messages are loaded
+  };
+
+  const handleSelectCase = (index) => {
+    setSelectedCaseIndex(index);
+    setRawMessage(cases[index] || "");
+    setParsedData([]);
+  };
+
   return (
     <div className="p-4 max-w-4xl mx-auto">
       <h1 className="text-xl text-indigo-900 font-bold mb-4">Visualize FIX Msg</h1>
+      {/* File Uploader and Case Selector */}
+      <FileUploader onMessagesParsed={handleMessagesParsed} />
+      {cases.length > 0 && (
+        <CaseSelector
+          messages={cases}
+          selectedIndex={selectedCaseIndex}
+          onSelect={handleSelectCase}
+        />
+      )}
+      {/* Raw Message Input */}
       <textarea
         className="border p-2 w-full h-24"
         value={rawMessage}
