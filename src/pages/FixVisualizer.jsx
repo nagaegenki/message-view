@@ -9,31 +9,42 @@ import { parseFixMessage } from '../parser/fixParser';
 function FixVisualizer() {
   const [rawMessage, setRawMessage] = useState("");
   const [parsedData, setParsedData] = useState([]);
-  const [delimiter, setDelimiter] = useState('\u0001');           // Default delimiter is SOH
-  const [selectedDefs, setselectedDefs] = useState("defaultDef"); // Placeholder for tag definitions
+  const [delimiter, setDelimiter] = useState('\u0001');         // Default delimiter is SOH
+  const [selectedDef, setSelectedDef] = useState("defaultDef"); // Placeholder for tag definition
   const [cases, setCases] = useState([]);
   const [selectedCaseIndex, setSelectedCaseIndex] = useState(null);
 
   const [tagDefsAll, setTagDefsAll] = useState({});
-  const [groupTagDefs, setGroupTagDefs] = useState({});
+  const [groupTagDef, setGroupTagDef] = useState({});
 
   useEffect(() => {
     const fetchDefs = async () => {
       const [defaultRes, customRes, groupRes] = await Promise.all([
         fetch("/message-view/configs/tagDefaultDefs.json"),
         fetch("/message-view/configs/tagCustomDefs.json"),
-        fetch("/message-view/configs/groupTagDefs.json"),
+        fetch("/message-view/configs/tagTestGroup.json"),
       ]);
-      const [defaultDef, customDef, groupDefs] = await Promise.all([
+      const [defaultDef, customDef, groupDef] = await Promise.all([
         defaultRes.json(),
         customRes.json(),
         groupRes.json(),
       ]);
       setTagDefsAll({ defaultDef, customDef });
-      setGroupTagDefs(groupDefs);
+      setGroupTagDef(groupDef);
     };
     fetchDefs();
   }, []);
+
+  // To switch different tag definitions based on user selection
+  const switchTagDefs = () => {
+    switch (selectedDef) {
+      case "customDef":
+        return tagDefsAll.customDef;
+      case "defaultDef":
+      default:
+        return tagDefsAll.defaultDef;
+    }
+  };
 
   const handleParse = () => {
     if (!rawMessage.trim()) {
@@ -41,12 +52,14 @@ function FixVisualizer() {
       return;
     }
 
-    if (!Object.keys(tagDefsAll).length || !Object.keys(groupTagDefs).length) {
+    if (!Object.keys(tagDefsAll).length || !Object.keys(groupTagDef).length) {
       alert("Tag definitions not loaded yet.");
       return;
     }
 
-    const parsed = parseFixMessage(rawMessage, delimiter, selectedDefs, tagDefsAll, groupTagDefs);
+    const tagDef = switchTagDefs();
+    console.log(tagDef);
+    const parsed = parseFixMessage(rawMessage, delimiter, tagDef, groupTagDef);
     setParsedData(parsed);
   };
 
@@ -98,8 +111,8 @@ function FixVisualizer() {
         <span className="text-indigo-900 font-bold">Tag Definition: </span>
         <select
           className="mt-1 border p-1"
-          value={selectedDefs}
-          onChange={(e) => setselectedDefs(e.target.value)}
+          value={selectedDef}
+          onChange={(e) => setSelectedDef(e.target.value)}
         >
           <option value="defaultDef">ver : EP298</option>
           <option value="customDef">Custom A</option>
@@ -113,7 +126,7 @@ function FixVisualizer() {
         >
           Visualize
         </button>
-        <CsvButton bgColor="bg-green-700" hoverColor="bg-green-900" selectedDefs={selectedDefs} parsedData={parsedData} />
+        <CsvButton bgColor="bg-green-700" hoverColor="bg-green-900" selectedDef={selectedDef} parsedData={parsedData} />
         <PdfButton />
       </div>
 
