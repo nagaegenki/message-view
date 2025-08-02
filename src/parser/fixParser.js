@@ -1,17 +1,15 @@
-export function parseFixMessage(message, delimiter, selectedDefs, tagDefsAll, groupTagDefs) {
+export function parseFixMessage(message, delimiter, tagDef, groupTagDef) {
   const fields = message.split(delimiter).filter(Boolean);
+  const tagMap = new Map();
+  const groupTagMap = new Map();
 
-  // To switch different tag definitions based on user selection
-  const switchTagDefs = () => {
-    switch (selectedDefs) {
-      case "customDef":
-        return tagDefsAll.customDef;
-      case "defaultDef":
-      default:
-        return tagDefsAll.defaultDef;
-    }
-  };
-  const tagDefs = switchTagDefs();
+  tagDef.forEach(([tag, def]) => {
+    tagMap.set(tag, def)}
+  );
+
+  groupTagDef.forEach(([parentTag, group]) => {
+    groupTagMap.set(parentTag, group);
+  });
 
   let i = 0;
   const result = [];
@@ -28,7 +26,7 @@ export function parseFixMessage(message, delimiter, selectedDefs, tagDefsAll, gr
         const [rawTag, ...valueParts] = fields[i].split("=");
         const tag = rawTag;
         const value = valueParts.join("=");
-        const def = tagDefs[tag] || { name: "Unknown", description: "No description" };
+        const def = tagMap.get(tag) || { name: "Unknown", description: "No description" };
 
         if (!tmpFields.includes(tag)) {
           i--;  // If the tag is not part of the group, we stop processing this group
@@ -37,9 +35,9 @@ export function parseFixMessage(message, delimiter, selectedDefs, tagDefsAll, gr
 
         tmpFields.splice(tmpFields.indexOf(tag), 1); // Remove tag from the list
 
-        if (def.group && groupTagDefs[tag]) {
+        if (def.group && groupTagMap.get(tag)) {
           const nestedGroupCount = parseInt(value, 10);
-          const nestedFields = groupTagDefs[tag].fields || [];
+          const nestedFields = groupTagMap.get(tag).fields || [];
           const nestedChildren = parseGroupChildren(nestedFields, nestedGroupCount);
 
           groupItem.push({
@@ -74,12 +72,12 @@ export function parseFixMessage(message, delimiter, selectedDefs, tagDefsAll, gr
     const [rawTag, ...rawValueParts] = fields[i].split("=");
     const tag = rawTag;
     const value = rawValueParts.join("=");
-    const def = tagDefs[tag] || { name: "Unknown", description: "No description" };
+    const def = tagMap.get(tag) || { name: "Unknown", description: "No description" };
 
-    if (def.group && groupTagDefs[tag]) {
+    if (def.group && groupTagMap.get(tag)) {
       // Process repeating group
       const groupCount = parseInt(value, 10);
-      const groupFields = groupTagDefs[tag]?.fields || [];
+      const groupFields = groupTagMap.get(tag).fields || [];
       const children = parseGroupChildren(groupFields, groupCount);
 
       // Add group field to the result
